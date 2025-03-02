@@ -5,7 +5,7 @@ export async function POST(req: Request) {
     const body = await req.json()
     const ollamaResponse = await fetch("http://localhost:11434/api/chat", {
       method: "POST",
-      mode: "cors",
+      mode: "no-cors",
       headers: {
         "Content-Type": "application/json",
       },
