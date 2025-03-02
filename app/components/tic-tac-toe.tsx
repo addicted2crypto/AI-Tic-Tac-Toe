@@ -20,20 +20,20 @@ export default function TicTacToe() {
   const [winner, setWinner] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [difficulty, setDifficulty] = useState(5) // Default to medium difficulty
+  const [difficulty, setDifficulty] = useState(5) 
   const [aiThinking, setAiThinking] = useState(false)
   const [score, setScore] = useState<Score>(() => {
-    // Initialize score from localStorage or default to 0
+  
     const savedScore = localStorage.getItem("tictactoeScore")
     return savedScore ? JSON.parse(savedScore) : { human: 0, ai: 0, draws: 0 }
   })
 
-  // Update localStorage when score changes
+  
   useEffect(() => {
     localStorage.setItem("tictactoeScore", JSON.stringify(score))
   }, [score])
 
-  // Check for winner and update score
+  
   useEffect(() => {
     const winner = calculateWinner(board)
     if (winner) {
@@ -49,14 +49,14 @@ export default function TicTacToe() {
     }
   }, [board])
 
-  // AI makes a move when it's O's turn
+  
   useEffect(() => {
     if (!isXNext && !winner) {
       makeAIMove()
     }
   }, [isXNext, winner])
 
-  // Handle player's move
+  
   const handleClick = (index: number) => {
     if (board[index] || winner || !isXNext || isLoading) return
 
@@ -66,7 +66,7 @@ export default function TicTacToe() {
     setIsXNext(false)
   }
 
-  // Make AI move by calling local API
+  
   const makeAIMove = async () => {
     setIsLoading(true)
     setAiThinking(true)
@@ -79,7 +79,7 @@ export default function TicTacToe() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "llama2", // or whichever model you're using
+          model: "llama2", 
           messages: [
             {
               role: "system",
@@ -108,10 +108,10 @@ export default function TicTacToe() {
       const data = await response.json()
       const aiMoveText = data.message.content.trim()
 
-      // Extract the number from the AI's response (1-9)
+      
       const aiMovePosition = Number.parseInt(aiMoveText.match(/\d+/)?.[0] || "-1")
 
-      // Convert from 1-9 position to 0-8 array index
+      
       const aiMove = aiMovePosition - 1
 
       if (aiMove >= 0 && aiMove < 9 && !board[aiMove]) {
@@ -120,7 +120,7 @@ export default function TicTacToe() {
         setBoard(newBoard)
       } else {
         console.warn("AI returned invalid move:", aiMovePosition)
-        // If AI returns invalid move, choose first available spot
+        
         const newBoard = [...board]
         const emptySpots = board.map((spot, idx) => (spot === null ? idx : -1)).filter((idx) => idx !== -1)
         if (emptySpots.length > 0) {
@@ -139,7 +139,7 @@ export default function TicTacToe() {
     }
   }
 
-  // Format board for AI prompt
+  
   const formatBoardForAI = (board: Array<string | null>) => {
     let result = ""
     for (let i = 0; i < 9; i += 3) {
@@ -148,7 +148,7 @@ export default function TicTacToe() {
     return result
   }
 
-  // Reset the game
+  
   const resetGame = () => {
     setBoard(Array(9).fill(null))
     setIsXNext(true)
@@ -157,12 +157,12 @@ export default function TicTacToe() {
     setAiThinking(false)
   }
 
-  // Reset the score
+  
   const resetScore = () => {
     setScore({ human: 0, ai: 0, draws: 0 })
   }
 
-  // Get difficulty label
+  
   const getDifficultyLabel = (level: number) => {
     if (level <= 2) return "Easy"
     if (level <= 4) return "Beginner"
@@ -171,9 +171,9 @@ export default function TicTacToe() {
     return "Impossible"
   }
 
-  // Render a square
+  
   const renderSquare = (index: number) => {
-    // Display 1-9 in empty squares for reference
+    
     const displayValue = board[index] || (winner ? "" : (index + 1).toString())
 
     return (
@@ -190,7 +190,7 @@ export default function TicTacToe() {
     )
   }
 
-  // Get status message
+  
   const getStatus = () => {
     if (winner === "X") return "You win!"
     if (winner === "O") return "AI wins!"
@@ -298,7 +298,7 @@ export default function TicTacToe() {
   )
 }
 
-// Helper function to calculate winner
+
 function calculateWinner(squares: Array<string | null>) {
   const lines = [
     [0, 1, 2],
