@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const ollamaResponse = await fetch("http://localhost:11434/api/chat", {
+    const ollamaResponse = await fetch("ai.ainetguard.com/api/chat", {
       method: "POST",
       mode: "no-cors",
       headers: {
