@@ -79,6 +79,7 @@ export default function TicTacToe() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          //add whatever model you are using here(can add array of models)
           model: "llama2", 
           messages: [
             {
