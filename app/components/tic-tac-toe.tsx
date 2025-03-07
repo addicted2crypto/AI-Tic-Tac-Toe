@@ -84,6 +84,7 @@ export default function TicTacToe() {
           messages: [
             {
               role: "system",
+              //add change here if you want to be the O... can add a toggle button
               content: `You are playing tic-tac-toe. You are 'O'. The current board is: 
               ${formatBoardForAI(board)}
               
