@@ -141,7 +141,7 @@ export default function TicTacToe() {
     }
   }
 
-  
+  //add format board for AI here
   const formatBoardForAI = (board: Array<string | null>) => {
     let result = ""
     for (let i = 0; i < 9; i += 3) {
