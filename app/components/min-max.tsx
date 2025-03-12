@@ -36,7 +36,7 @@ interface Board {
   
     return null;
   }
-  
+  //check if the board is full
   function isBoardFull(board: Board): boolean {
     return Object.values(board).every((cell) => cell !== null);
   }
