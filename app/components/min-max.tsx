@@ -40,7 +40,7 @@ interface Board {
   function isBoardFull(board: Board): boolean {
     return Object.values(board).every((cell) => cell !== null);
   }
-  
+  //min and max threshold
   function minimax(
     board: Board,
     depth: number,
