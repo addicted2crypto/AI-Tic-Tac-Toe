@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next"
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     try {
+      //can add any endpoint for llm here eg "localhost:2222/api/chat for proxy"
       const ollamaResponse = await fetch("http://localhost:11434/api/chat", {
         method: "POST",
         headers: {
