@@ -121,7 +121,7 @@ export default function TicTacToe() {
         newBoard[aiMove] = "O"
         setBoard(newBoard)
       } else {
-        console.warn("AI returned invalid move:", aiMovePosition)
+        console.warn("AI returned a invalid move:", aiMovePosition)
         
         const newBoard = [...board]
         const emptySpots = board.map((spot, idx) => (spot === null ? idx : -1)).filter((idx) => idx !== -1)
