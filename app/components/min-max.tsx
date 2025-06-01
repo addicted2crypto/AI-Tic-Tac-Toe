@@ -7,7 +7,7 @@ interface Board {
     OWins = 10,
     Tie = 0,
   }
-  //fix the return type of the function
+  //validate the return type
   function calculateWinner(board: Board): GameResult | null {
     const winningCombinations = [
       [0, 1, 2],
