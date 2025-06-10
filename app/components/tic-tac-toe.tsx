@@ -22,6 +22,9 @@ export default function TicTacToe() {
   const [error, setError] = useState<string | null>(null)
   const [difficulty, setDifficulty] = useState(5) 
   const [aiThinking, setAiThinking] = useState(false)
+  const [currentmodel, setCurrentModel] = useState("llama2") //default model can be changed to whatever you want
+  //add whatever models you want to use here add error handling for invalid models
+  // const models = ["llama2", "llama3", "mistral", "gemini", "gpt-4o"]
   const [score, setScore] = useState<Score>(() => {
   
     const savedScore = localStorage.getItem("tictactoeScore")
@@ -58,7 +61,8 @@ export default function TicTacToe() {
 
   
   const handleClick = (index: number) => {
-    if (board[index] || winner || !isXNext || isLoading) return
+    if (board[index] || winner || !isXNext || isLoading) 
+      return
 
     const newBoard = [...board]
     newBoard[index] = "X"
@@ -69,8 +73,9 @@ export default function TicTacToe() {
   
   const makeAIMove = async () => {
     setIsLoading(true)
-    setAiThinking(true)
-    setError(null)
+
+    setAiThinking(true) //add loading state for AI thinking
+    setError(null) //reset error state before making AI move
 
     try {
       const response = await fetch("/api/ollama", {
@@ -80,7 +85,7 @@ export default function TicTacToe() {
         },
         body: JSON.stringify({
           //add whatever model you are using here(can add array of models)
-          model: "llama2", 
+          model: (["llama2",`${currentmodel}`]), 
           messages: [
             {
               role: "system",
