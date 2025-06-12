@@ -4,11 +4,12 @@ export async function POST(req: Request) {
   try {
     const body = await req.json()
 
-    //add any endpoint for you LLM here
+    //add any endpoint for you LLM here url /api/chat 
     const ollamaResponse = await fetch("localhost://11434/api/chat", {
       method: "POST",
       mode: "no-cors",
       headers: {
+        //bearer token if using our proxy 
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
