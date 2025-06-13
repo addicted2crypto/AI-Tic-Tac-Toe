@@ -22,13 +22,20 @@ export default function TicTacToe() {
   const [error, setError] = useState<string | null>(null)
   const [difficulty, setDifficulty] = useState(5) 
   const [aiThinking, setAiThinking] = useState(false)
-  const [currentmodel, setCurrentModel] = useState("llama2") //default model can be changed to whatever you want
+  const [currentmodel, setCurrentModel] = useState("codestral") //default model can be changed to whatever you want
   //add whatever models you want to use here add error handling for invalid models
   // const models = ["llama2", "llama3", "mistral", "gemini", "gpt-4o"]
+  // localStorage.setItem("tictactoeModel", currentmodel) //save model to local storage
+  useEffect(() => {
+    const savedModel = localStorage.getItem("tictactoeModel")
+    if (savedModel) {
+      setCurrentModel(savedModel)
+    }
+  }, []);
   const [score, setScore] = useState<Score>(() => {
   
-    const savedScore = localStorage.getItem("tictactoeScore")
-    return savedScore ? JSON.parse(savedScore) : { human: 0, ai: 0, draws: 0 }
+    // const savedScore = localStorage.getItem("tictactoeScore")
+    return  { human: 0, ai: 0, draws: 0 }
   })
 
   
@@ -78,14 +85,17 @@ export default function TicTacToe() {
     setError(null) //reset error state before making AI move
 
     try {
-      const response = await fetch("/api/ollama", {
+      const response = await fetch("https://ai.ainetguard.com/api/chat", {
         method: "POST",
+        mode: "cors",
         headers: {
           "Content-Type": "application/json",
+          "CF-Authorization": process.env.CF_Authorization || "",
         },
         body: JSON.stringify({
           //add whatever model you are using here(can add array of models)
-          model: (["llama2",`${currentmodel}`]), 
+          model: (["codestral",`${currentmodel}`]), 
+         
           messages: [
             {
               role: "system",
@@ -107,7 +117,7 @@ export default function TicTacToe() {
           stream: false,
         }),
       })
-
+       console.log("This is the response from the AI:", response)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
