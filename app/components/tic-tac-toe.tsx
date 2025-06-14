@@ -94,7 +94,7 @@ export default function TicTacToe() {
         },
         body: JSON.stringify({
           //add whatever model you are using here(can add array of models)
-          model: (["codestral",`${currentmodel}`]), 
+          model: (["phi4:14b-q8_0",`${currentmodel}`]), 
          
           messages: [
             {

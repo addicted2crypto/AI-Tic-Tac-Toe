@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next"
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
@@ -9,6 +9,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         headers: {
           "Content-Type": "application/json",
           "CF-Authorization": process.env.CF_Authorization || "",
+          "CF-Appsession": process.env.CF_Appsession || "",
+          "CF-Authorization1": process.env.CF_Authorization1 || "",
         },
         body: JSON.stringify(req.body),
       })
@@ -28,4 +30,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }
-
