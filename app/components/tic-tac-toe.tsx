@@ -85,19 +85,20 @@ export default function TicTacToe() {
     setError(null) //reset error state before making AI move
 
     try {
-      const response = await fetch("http://localhost:11434/api/chat", {
+      const response = await fetch("https://ai.ainetguard.com/api/chat", {
         method: "POST",
-        mode: "cors",
+        // mode: "cors",
         headers: {
           "Content-Type": "application/json",
           // WILL Uncomment and set these for ai.ainetguard.com
           // "CF-Authorization": process.env.CF_Authorization || "",
+          "CF-Authorization": process.env.CF_Authorization || "",
         },
         body: JSON.stringify({
           //add whatever model you are us
           // Will Uncomment and set these for ai.ainetguard.com
         // model: (["phi4:14b-q8_0",`${currentmodel}`]), 
-          model: ("llama2"),
+          model: ("phi4:14b-q8_0"),
          
           messages: [
             {
