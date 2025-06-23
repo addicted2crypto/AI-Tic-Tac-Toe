@@ -13,10 +13,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           // "CF-Appsession": process.env.CF_Appsession || "",
           // "CF-Authorization1": process.env.CF_Authorization1 || "",
            "CF-Authorization": process.env.CF_Authorization || "",
+           "CF-binding": process.env.CF_binding || "",
+           "CF-Authorization2": process.env.CF_Authorization2 || "",
         },
+        
         body: JSON.stringify(req.body),
       })
-
+      console.log("headers", ollamaResponse.headers)
       if (!ollamaResponse.ok) {
         throw new Error(`Ollama API responded with status: ${ollamaResponse.status}`)
       }
