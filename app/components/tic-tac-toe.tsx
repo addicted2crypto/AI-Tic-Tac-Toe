@@ -89,10 +89,14 @@ export default function TicTacToe() {
         method: "POST",
         // mode: "cors",
         headers: {
+         
+          "credentials": "include",
           "Content-Type": "application/json",
           // WILL Uncomment and set these for ai.ainetguard.com
           // "CF-Authorization": process.env.CF_Authorization || "",
           "CF-Authorization": process.env.CF_Authorization || "",
+          "CF-Appsession": process.env.CF_Appsession || "",
+          
         },
         body: JSON.stringify({
           //add whatever model you are us

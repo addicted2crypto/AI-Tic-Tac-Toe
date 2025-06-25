@@ -8,14 +8,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // WILL Uncomment and set these for ai.ainetguard.com  
-          // "CF-Authorization": process.env.CF_Authorization || "",
-          // "CF-Appsession": process.env.CF_Appsession || "",
-          // "CF-Authorization1": process.env.CF_Authorization1 || "",
-            credentials: "include",
-          //  "CF-Authorization": process.env.CF_Authorization || "",
-          //  "CF-binding": process.env.CF_binding || "",
-          //  "CF-Authorization2": process.env.CF_Authorization2 || "",
+       
+          "CF-Appsession": process.env.CF_Appsession || "",
+          
+            "credentials": "include",
+            
+           "CF-Authorization": process.env.CF_Authorization || "",
+          
         },
         
         body: JSON.stringify(req.body),
