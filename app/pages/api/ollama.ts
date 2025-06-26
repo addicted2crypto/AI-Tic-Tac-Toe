@@ -9,36 +9,46 @@ const corsMiddleware = (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(200).end();
   }
 };
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   corsMiddleware(req, res);
   if (req.method === "POST") {
     try {
+      const id = process.env.CF_Appsession;
+      const secret = process.env.CF_Authorization;
+      const token = process.env.CF_Token;
+
+      let headers: any = {};
+      if(token) {
+        headers["cf-access-token"] = token;
+      } else {
+        headers["CF-Access-Client-Id"] = id;
+        headers["CF-Access-Client-Secret"] = secret;
+      }
       //can add any endpoint for llm here eg "localhost:2222/api/chat for proxy"
       const ollamaResponse = await fetch("https://ai.ainetguard.com/api/chat", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-       
-          "CF-Appsession": process.env.CF_Appsession || "",
-          
-           
-            
-           "CF-Authorization": process.env.CF_Authorization || "",
-          
-        },
-         credentials: "include",
-        body: JSON.stringify(req.body),
-      })
-      console.log("headers", ollamaResponse.headers)
-      if (!ollamaResponse.ok) {
-        throw new Error(`Ollama API responded with status: ${ollamaResponse.status}`)
+          method: "POST",
+          headers,
+          body: JSON.stringify(req.body),
+          //added to headers for ease of code breakup
+          // "Content-Type": "application/json",
+          // "CF-Appsession": process.env.CF_Appsession || "",
+          //  "CF-Authorization": process.env.CF_Authorization || "",
+        }
+        });
+         if (!ollamaResponse.ok) {
+        throw new Error(`Ollama API responded with status: ${ollamaResponse.status}`);
       }
+      
+   
 
-      const data = await ollamaResponse.json()
+      const data = await ollamaResponse.json();
       res.status(200).json(data)
     } catch (error) {
-      console.error("Error calling Ollama API:", error)
-      res.status(500).json({ error: "Failed to call Ollama API" })
+      console.error("Error calling Ollama API:", error);
+      res.status(500).json({ error: "Error making a request to that glorious api endpoint" });
     }
   } else {
     res.setHeader("Allow", ["POST"])
