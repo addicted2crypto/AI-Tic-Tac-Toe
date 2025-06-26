@@ -20,10 +20,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       let headers: any = {};
       if(token) {
-        headers["cf-access-token"] = token;
+        headers["CF_Authorization "] = token;
       } else {
-        headers["CF-Access-Client-Id"] = id;
-        headers["CF-Access-Client-Secret"] = secret;
+        // headers["CF-Access-Client-Id"] = id;
+        headers["CF_AppSession"] = secret;
       }
       //can add any endpoint for llm here eg "localhost:2222/api/chat for proxy"
       const ollamaResponse = await fetch("https://ai.ainetguard.com/api/chat", {

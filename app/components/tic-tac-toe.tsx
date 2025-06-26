@@ -81,9 +81,10 @@ export default function TicTacToe() {
   const makeAIMove = async () => {
     setIsLoading(true)
 
-    setAiThinking(true) //add loading state for AI thinking
-    setError(null) //reset error state before making AI move
+    setAiThinking(true) 
+    setError(null) 
 
+    
     try {
       const response = await fetch("https://ai.ainetguard.com/api/chat", {
         method: "POST",
@@ -98,7 +99,7 @@ export default function TicTacToe() {
           "CF-Appsession": process.env.CF_Appsession || "",
           
         },
-        credentials: "include",
+        // credentials: "include",
         body: JSON.stringify({
           //add whatever model you are us
           // Will Uncomment and set these for ai.ainetguard.com
