@@ -90,7 +90,7 @@ export default function TicTacToe() {
         // mode: "cors",
         headers: {
          
-          "credentials": "include",
+          
           "Content-Type": "application/json",
           // WILL Uncomment and set these for ai.ainetguard.com
           // "CF-Authorization": process.env.CF_Authorization || "",
@@ -98,6 +98,7 @@ export default function TicTacToe() {
           "CF-Appsession": process.env.CF_Appsession || "",
           
         },
+        credentials: "include",
         body: JSON.stringify({
           //add whatever model you are us
           // Will Uncomment and set these for ai.ainetguard.com

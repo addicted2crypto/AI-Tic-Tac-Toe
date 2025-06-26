@@ -1,6 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+const corsMiddleware = (req: NextApiRequest, res: NextApiResponse) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+};
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  corsMiddleware(req, res);
   if (req.method === "POST") {
     try {
       //can add any endpoint for llm here eg "localhost:2222/api/chat for proxy"
@@ -11,12 +21,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        
           "CF-Appsession": process.env.CF_Appsession || "",
           
-            "credentials": "include",
+           
             
            "CF-Authorization": process.env.CF_Authorization || "",
           
         },
-        
+         credentials: "include",
         body: JSON.stringify(req.body),
       })
       console.log("headers", ollamaResponse.headers)
