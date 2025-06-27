@@ -86,6 +86,9 @@ export default function TicTacToe() {
 
     
     try {
+      //add logs    
+      console.log("Making AI move with difficulty level:", difficulty)
+      console.log("Current board state:", board)
       const response = await fetch("https://ai.ainetguard.com/api/chat", {
         method: "POST",
         // mode: "cors",
