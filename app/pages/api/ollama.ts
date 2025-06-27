@@ -11,6 +11,7 @@ const corsMiddleware = (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  
   corsMiddleware(req, res);
   if (req.method === "POST") {
     try {
@@ -20,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       let headers: any = {};
       if(token) {
-        headers["CF_Authorization "] = token;
+        headers["Authorization"] = `Brearer ${token}`;
       } else {
         // headers["CF-Access-Client-Id"] = id;
         headers["CF_AppSession"] = secret;
@@ -30,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         method: "POST",
         headers: {
           method: "POST",
-          headers,
+          ...headers,
           body: JSON.stringify(req.body),
           //added to headers for ease of code breakup
           // "Content-Type": "application/json",

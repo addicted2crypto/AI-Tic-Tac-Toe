@@ -95,8 +95,8 @@ export default function TicTacToe() {
           "Content-Type": "application/json",
           // WILL Uncomment and set these for ai.ainetguard.com
           // "CF-Authorization": process.env.CF_Authorization || "",
-          "CF-Authorization": process.env.CF_Authorization || "",
-          "CF-Appsession": process.env.CF_Appsession || "",
+          // "CF-Authorization": process.env.CF_Authorization || "",
+          // "CF-Appsession": process.env.CF_Appsession || "",
           
         },
         // credentials: "include",
