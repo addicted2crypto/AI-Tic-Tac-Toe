@@ -21,17 +21,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       let headers: any = {};
       if(token) {
-        headers["Authorization"] = `Brearer ${token}`;
+        headers["Authorization"] = `Bearer ${token}`;
       } else {
-        // headers["CF-Access-Client-Id"] = id;
+        headers["CF-Access-Client-Id"] = id;
         headers["CF_AppSession"] = secret;
       }
       //can add any endpoint for llm here eg "localhost:2222/api/chat for proxy"
       const ollamaResponse = await fetch("https://ai.ainetguard.com/api/chat", {
         method: "POST",
         headers: {
-          method: "POST",
           ...headers,
+          "content-type": "application/json",
           body: JSON.stringify(req.body),
           //added to headers for ease of code breakup
           // "Content-Type": "application/json",
