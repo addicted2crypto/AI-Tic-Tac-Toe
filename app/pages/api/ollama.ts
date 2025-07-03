@@ -21,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       let headers: any = {};
       if(token) {
+        // If token is provided, use it for authorization
         headers["Authorization"] = `Bearer ${token}`;
       } else {
         headers["CF-Access-Client-Id"] = id;
