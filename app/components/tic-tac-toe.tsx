@@ -78,41 +78,24 @@ export default function TicTacToe() {
   }
 
   
-  const makeAIMove = async () => {
+   const makeAIMove = async () => {
     setIsLoading(true)
+    setAiThinking(true)
+    setError(null)
 
-    setAiThinking(true) 
-    setError(null) 
-
-    
     try {
-      //add logs    
       console.log("Making AI move with difficulty level:", difficulty)
       console.log("Current board state:", board)
       const response = await fetch("https://ai.ainetguard.com/api/chat", {
         method: "POST",
-        // mode: "cors",
         headers: {
-         
-          
           "Content-Type": "application/json",
-          // WILL Uncomment and set these for ai.ainetguard.com
-          // "CF-Authorization": process.env.CF_Authorization || "",
-          // "CF-Authorization": process.env.CF_Authorization || "",
-          // "CF-Appsession": process.env.CF_Appsession || "",
-          
         },
-        // credentials: "include",
         body: JSON.stringify({
-          //add whatever model you are us
-          // Will Uncomment and set these for ai.ainetguard.com
-        // model: (["phi4:14b-q8_0",`${currentmodel}`]), 
-          model: ("phi4:14b-q8_0"),
-         
+          model: "phi4:14b-q8_0",
           messages: [
             {
               role: "system",
-              //add change here if you want to be the O... can add a toggle button
               content: `You are playing tic-tac-toe. You are 'O'. The current board is: 
               ${formatBoardForAI(board)}
               
@@ -130,7 +113,7 @@ export default function TicTacToe() {
           stream: false,
         }),
       })
-       console.log("This is the response from the AI:", response)
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -138,10 +121,8 @@ export default function TicTacToe() {
       const data = await response.json()
       const aiMoveText = data.message.content.trim()
 
-      
       const aiMovePosition = Number.parseInt(aiMoveText.match(/\d+/)?.[0] || "-1")
 
-      
       const aiMove = aiMovePosition - 1
 
       if (aiMove >= 0 && aiMove < 9 && !board[aiMove]) {
@@ -149,8 +130,7 @@ export default function TicTacToe() {
         newBoard[aiMove] = "O"
         setBoard(newBoard)
       } else {
-        console.warn("AI returned a invalid move:", aiMovePosition)
-        
+        console.warn("AI returned an invalid move:", aiMovePosition)
         const newBoard = [...board]
         const emptySpots = board.map((spot, idx) => (spot === null ? idx : -1)).filter((idx) => idx !== -1)
         if (emptySpots.length > 0) {
