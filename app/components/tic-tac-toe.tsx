@@ -84,14 +84,19 @@ export default function TicTacToe() {
     setError(null)
 
     try {
-      console.log("Making AI move with difficulty level:", difficulty)
-      console.log("Current board state:", board)
-      const response = await fetch("https://ai.ainetguard.com/api/chat", {
+      console.log("Making AI move with difficulty level:", difficulty);
+      console.log("Current board state:", board);
+      console.log("Making fetch request...");
+      const response = await fetch("https://ai1.rougeai.net/api/chat", {
         method: "POST",
         headers: {
+          "CF-Client-Id": process.env.CF_Client_Id || "",
+          "CF-Client-Secret": process.env.CF_Client_Secret || "",
+          // "CF-Access-Client-Id": process.env.CF_Appsession || "",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          
           model: "phi4:14b-q8_0",
           messages: [
             {
@@ -112,7 +117,10 @@ export default function TicTacToe() {
           ],
           stream: false,
         }),
+       
       })
+      console.log("HEADERS:", response.headers);
+      console.log("RESPONSE:", response);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)

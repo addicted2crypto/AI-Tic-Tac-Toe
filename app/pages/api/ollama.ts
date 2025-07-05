@@ -23,12 +23,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if(token) {
         // If token is provided, use it for authorization
         headers["Authorization"] = `Bearer ${token}`;
+        console.log("Authorization token:", token);
       } else {
         headers["CF-Access-Client-Id"] = id;
-        headers["CF_AppSession"] = secret;
+        console.log("CF-Access-Client-Id:", id);
+        headers["CF-Client-Secret"] = secret;
+        console.log("CF-Client-Secret:", secret);
+        // headers["CF-Appsession"] = id || "";
+        // console.log("CF-Appsession:", id);
+        headers["CF-Authorization"] = secret || "";
+        console.log("CF-Authorization:", secret);
       }
       //can add any endpoint for llm here eg "localhost:2222/api/chat for proxy"
-      const ollamaResponse = await fetch("https://ai.ainetguard.com/api/chat", {
+      const ollamaResponse = await fetch("https://ai1.rougeai.net/api/chat", {
+        
+
         method: "POST",
         headers: {
           ...headers,
@@ -39,7 +48,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           // "CF-Appsession": process.env.CF_Appsession || "",
           //  "CF-Authorization": process.env.CF_Authorization || "",
         }
-        });
+        });console.log("Response headers from ai1.rougeai.net:", ollamaResponse.headers);
+
          if (!ollamaResponse.ok) {
         throw new Error(`Ollama API responded with status: ${ollamaResponse.status}`);
       }
