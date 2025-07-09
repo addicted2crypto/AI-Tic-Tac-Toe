@@ -87,17 +87,20 @@ export default function TicTacToe() {
       console.log("Making AI move with difficulty level:", difficulty);
       console.log("Current board state:", board);
       console.log("Making fetch request...");
-      const response = await fetch("https://ai1.rougeai.net/api/chat", {
+      // const url = "https://ai1.rougeai.net";
+      const url = "http://localhost:11434";
+      const response = await fetch(`${url}/api/chat`, {
         method: "POST",
         headers: {
-          "CF-Client-Id": process.env.CF_Client_Id || "",
-          "CF-Client-Secret": process.env.CF_Client_Secret || "",
+          // "CF-Client-Id": process.env.CF_Client_Id || "",
+          // "CF-Client-Secret": process.env.CF_Client_Secret || "",
           // "CF-Access-Client-Id": process.env.CF_Appsession || "",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           
-          model: "phi4:14b-q8_0",
+          // model: "phi4:14b-q8_0" 
+          model:  "llama2",
           messages: [
             {
               role: "system",

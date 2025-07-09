@@ -35,12 +35,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log("CF-Authorization:", secret);
       }
       //can add any endpoint for llm here eg "localhost:2222/api/chat for proxy"
-      const ollamaResponse = await fetch("https://ai1.rougeai.net/api/chat", {
+      // const url = "https://ai1.rougeai.net/api/chat";
+      const url = "http://localhost:11434/api/chat";
+      const ollamaResponse = await fetch(`${url}/api/chat`, {
         
 
         method: "POST",
         headers: {
-          ...headers,
+          // ...headers,
           "content-type": "application/json",
           body: JSON.stringify(req.body),
           //added to headers for ease of code breakup
