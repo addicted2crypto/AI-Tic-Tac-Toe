@@ -108,7 +108,7 @@ interface Board {
     return bestMove;
   }
   
-  // Example 
+
   const initialBoard: Board = Array(9).fill(null);
   initialBoard[0] = 'X';
   initialBoard[1] = 'O';
