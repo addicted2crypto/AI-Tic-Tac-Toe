@@ -42,7 +42,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         method: "POST",
         headers: {
-          // ...headers,
+          //headers only depending on the api you are using
+          // ...headers, 
           "content-type": "application/json",
           body: JSON.stringify(req.body),
           //added to headers for ease of code breakup
