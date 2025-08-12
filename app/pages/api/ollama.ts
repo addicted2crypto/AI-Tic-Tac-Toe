@@ -36,6 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
       //can add any endpoint for llm here eg "localhost:2222/api/chat for proxy"
       // const url = "https://ai1.rougeai.net/api/chat";
+      //url for open ai endpoint https://api.openai.com/v1/responses
       const url = "http://localhost:11434/api/chat";
       const ollamaResponse = await fetch(`${url}/api/chat`, {
         
