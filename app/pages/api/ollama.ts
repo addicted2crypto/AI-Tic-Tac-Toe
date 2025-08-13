@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       //url for open ai endpoint https://api.openai.com/v1/responses
       const url = "http://localhost:11434/api/chat";
       const ollamaResponse = await fetch(`${url}/api/chat`, {
-        
+        // const openAIResponse = await fetch(`${url}/v1/responses`, {
 
         method: "POST",
         headers: {
