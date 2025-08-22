@@ -247,7 +247,7 @@ Return ONLY the number (1-9) of your chosen move. Do not include any explanation
 
   const getStatus = () => {
     if (winner === "X") return "You win!";
-    if (winner === "O") return "AI wins!";
+    if (winner === "O") return "You lose!";
     if (winner === "draw") return "It's a draw!";
     if (aiThinking) return "AI is thinking... 🤖";
     return isXNext ? "Your turn (X)" : "AI's turn (O)";
@@ -282,7 +282,7 @@ Return ONLY the number (1-9) of your chosen move. Do not include any explanation
                     <p className='max-w-xs'>
                       Level 1: Very easy, makes random moves
                       <br />
-                      Level 10: Impossible to beat, makes perfect moves
+                      Level 10: Impossible to beat, makes almost perfect moves
                     </p>
                   </TooltipContent>
                 </Tooltip>

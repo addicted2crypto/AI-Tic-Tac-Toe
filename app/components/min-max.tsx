@@ -1,3 +1,5 @@
+import { count } from 'console';
+
 interface Board {
     [index: number]: 'X' | 'O' | null;
   }
@@ -7,7 +9,6 @@ interface Board {
     OWins = 10,
     Tie = 0,
   }
-  //validate the return type
   function calculateWinner(board: Board): GameResult | null {
     const winningCombinations = [
       [0, 1, 2],
@@ -36,15 +37,17 @@ interface Board {
   
     return null;
   }
-  //check if the board is full
   function isBoardFull(board: Board): boolean {
     return Object.values(board).every((cell) => cell !== null);
   }
-  //min and max threshold
+
   function minimax(
     board: Board,
     depth: number,
-    isMaximizing: boolean
+    isMaximizing: boolean,
+    level: number,
+    alpha: number,
+    beta: number,
   ): number | null {
     const winner = calculateWinner(board);
   
@@ -62,8 +65,12 @@ interface Board {
       for (let i = 0; i < 9; i++) {
         if (board[i] === null) {
           board[i] = 'O';
-          const score = minimax(board, depth + 1, false);
+          const score = minimax(board, depth + 1, false, level, alpha, beta);
           board[i] = null;
+
+          if(level > 5) {
+            alpha += 10;
+          }
           if (score !== null && (bestScore === null || score > bestScore)) {
             bestScore = score;
           }
@@ -77,7 +84,7 @@ interface Board {
       for (let i = 0; i < 9; i++) {
         if (board[i] === null) {
           board[i] = 'X';
-          const score: number | null = minimax(board, depth + 1, true);
+          const score: number | null = minimax(board, depth + 1, true, level, alpha, beta);
           board[i] = null;
           if (score !== null && (bestScore === null || score < bestScore)) {
             bestScore = score;
@@ -96,7 +103,7 @@ interface Board {
     for (let i = 0; i < 9; i++) {
       if (board[i] === null) {
         board[i] = 'O';
-        const score: number | null = minimax(board, 0, false);
+        const score: number | null = minimax(board, 0, false, 10, -Infinity, Infinity);
         board[i] = null;
         if (score !== null && (bestScore === null || score > bestScore)) {
           bestScore = score;
