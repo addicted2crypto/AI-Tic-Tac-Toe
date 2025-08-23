@@ -18,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { streamText } from 'ai';
 
 interface Score {
   human: number;
@@ -33,16 +34,17 @@ export default function TicTacToe() {
   const [error, setError] = useState<string | null>(null);
   const [difficulty, setDifficulty] = useState(Number.parseInt(localStorage.getItem("tictactoeDifficulty") || "5", 10));
   const [aiThinking, setAiThinking] = useState(false);
-  const [currentmodel, setCurrentModel] = useState("codestral"); //default model can be changed to whatever you want
+  const [currentmodel, setCurrentModel] = useState("phi4:14b-q8_0"); //default model can be changed to whatever you want
   //add whatever models you want to use here add error handling for invalid models
   // const models = ["llama2", "llama3", "mistral", "gemini", "gpt-4o"]
-  // localStorage.setItem("tictactoeModel", currentmodel) //save model to local storage
+  localStorage.setItem("tictactoeModel", currentmodel) //save model to local storage
   useEffect(() => {
     const savedModel = localStorage.getItem("tictactoeModel");
     if (savedModel) {
       setCurrentModel(savedModel);
     }
   }, []);
+  
   const [score, setScore] = useState<Score>(() => {
     // const savedScore = localStorage.getItem("tictactoeScore")
     return { human: 0, ai: 0, draws: 0 };
@@ -92,22 +94,26 @@ export default function TicTacToe() {
       console.log("Current board state:", board);
       console.log("Making fetch request...");
       // const url = "https://ai1.rougeai.net";
-      const url = "http://localhost:11434";
-      const response = await fetch(`${url}/api/chat`, {
-        method: "POST",
-        headers: {
-          // "CF-Client-Id": process.env.CF_Client_Id || "",
-          // "CF-Client-Secret": process.env.CF_Client_Secret || "",
-          // "CF-Access-Client-Id": process.env.CF_Appsession || "",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      // const url = "http://localhost:11434";
+      const response = await streamText({
+
+     
+      // fetch(`${url}/api/chat`, { //here I want to hit gatewat.ts***
+      //   method: "POST",
+      //   headers: {
+      //     // "CF-Client-Id": process.env.CF_Client_Id || "",
+      //     // "CF-Client-Secret": process.env.CF_Client_Secret || "",
+      //     // "CF-Access-Client-Id": process.env.CF_Appsession || "",
+      //     "Content-Type": "application/json",
+      //   },
+        // body: JSON.stringify({
           // model: "phi4:14b-q8_0"
-          model: "llama2",
-          messages: [
-            {
-              role: "system",
-              content: `You are playing Tic-Tac-Toe. You are 'O'. The current board is: 
+          model: currentmodel,
+          prompt: 
+            
+              // role: "system",
+              // content: 
+              `You are playing Tic-Tac-Toe. You are 'O'. The current board is: 
 ${formatBoardForAI(board)}
 
 Difficulty level: ${difficulty}/10 (1 is very easy and plays random/poor moves, 10 is impossible to beat and plays perfectly).
@@ -143,12 +149,12 @@ Thinking process:
 - Choose the move based on difficulty logic.
 
 Return ONLY the number (1-9) of your chosen move. Do not include any explanation or text — just the number.`,
-            },
-          ],
+          //   },
+          // ],
 
-          stream: false,
-        }),
-      });
+          // stream: true,
+        });
+      // });
       console.log("HEADERS:", response.headers);
       console.log("RESPONSE:", response);
 
@@ -156,8 +162,8 @@ Return ONLY the number (1-9) of your chosen move. Do not include any explanation
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-      const aiMoveText = data.message.content.trim();
+      // const data = await response.response();
+      const aiMoveText = response.textStream;
 
       const aiMovePosition = Number.parseInt(
         aiMoveText.match(/\d+/)?.[0] || "-1"
