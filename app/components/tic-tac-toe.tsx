@@ -18,13 +18,22 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { streamText } from 'ai';
+import { CallSettings, LanguageModel, ModelMessage, streamText } from 'ai';
+import 'dotenv/config';
+import { Prompt } from 'next/font/google';
 
+interface StreamTextOptions extends CallSettings {
+  
+  model: LanguageModel;
+  apiKey?: string;
+  prompt: string;
+}
 interface Score {
   human: number;
   ai: number;
   draws: number;
 }
+
 
 export default function TicTacToe() {
   const [board, setBoard] = useState(Array(9).fill(null));
@@ -89,15 +98,17 @@ export default function TicTacToe() {
     setAiThinking(true);
     setError(null);
 
+   
     try {
       console.log("Making AI move with difficulty level:", difficulty);
       console.log("Current board state:", board);
       console.log("Making fetch request...");
       // const url = "https://ai1.rougeai.net";
       // const url = "http://localhost:11434";
-      const response = await streamText({
+      
+      const response = streamText({
 
-     
+          
       // fetch(`${url}/api/chat`, { //here I want to hit gatewat.ts***
       //   method: "POST",
       //   headers: {
@@ -108,25 +119,28 @@ export default function TicTacToe() {
       //   },
         // body: JSON.stringify({
           // model: "phi4:14b-q8_0"
+          apikey: process.env.AI_GATEWAY_API_KEY,
           model: currentmodel,
           prompt: 
-            
-              // role: "system",
-              // content: 
               `You are playing Tic-Tac-Toe. You are 'O'. The current board is: 
 ${formatBoardForAI(board)}
 
-Difficulty level: ${difficulty}/10 (1 is very easy and plays random/poor moves, 10 is impossible to beat and plays perfectly).
+Difficulty level: ${difficulty}/10 (higher values indicate more stategic and optimal play, focued on blocking player from 3 in a row).
 
+You are '0' and your opponent is 'X'.Your goal is to get 3 in a row before player 'X' does.
 Board position layout (1–9):
 [1][2][3]
 [4][5][6]
 [7][8][9]
+Winning combinations:
+  Rows: 1-2-3, 4-5-6, 7-8-9
+  Columns: 1-4-7, 2-5-8, 3-6-9
+  Diagonals: 1-5-9, 3-5-7
 
 Rules:
 - You are 'O'.
 - Your opponent is 'X'.
-- A win is 3 of your O’s in a row, column, or diagonal.
+-  win is 3 of your O’s in a row, column, or diagonal.
 - Winning combinations:
   Rows: 1-2-3, 4-5-6, 7-8-9
   Columns: 1-4-7, 2-5-8, 3-6-9
@@ -135,9 +149,10 @@ Rules:
 Strategy:
 1. First, check if you can win this move. If yes, play that position.
 2. Next, check if 'X' can win next move. If yes, block it.
-3. If no win or threat, pick a smart position based on difficulty:
+ If you can't win this move, focus on blocking 'X' from winning. A blocked opponent is just as good as a won game!
+3.If no win or threat, pick a smart position based on difficulty:
 
-- Difficulty 1: Make random or poor moves. No blocking or winning.
+- Difficulty 1: At difficulty level 1, play randomly or make moves that don't consider blocking or winning.
 - Difficulty 2-5: Sometimes block or win, but not always.
 - Difficulty 6-9: Play mostly smart moves, may occasionally make a mistake.
 - Difficulty 10: Always play perfectly. Win if possible, block if needed. Never make a mistake. Cannot be beaten.
@@ -153,21 +168,29 @@ Return ONLY the number (1-9) of your chosen move. Do not include any explanation
           // ],
 
           // stream: true,
-        });
+        } as StreamTextOptions);
       // });
-      console.log("HEADERS:", response.headers);
-      console.log("RESPONSE:", response);
+      // console.log("HEADERS:", response.headers);
+      // console.log("RESPONSE:", response);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response) {
+        throw new Error(`HTTP error! status: ${response}`);
       }
+const aiMoveTextChuncks = [];
+    for await (const chunk of response.textStream) {
+      aiMoveTextChuncks.push(chunk);
+    }
+    const aiMoveText = aiMoveTextChuncks.join('');
+
+    const aiMovePosition = Number.parseInt(
+      aiMoveText.match(/\d+/)?.[0] || "-1");
 
       // const data = await response.response();
-      const aiMoveText = response.textStream;
+      // const aiMoveText = response.textStream;
 
-      const aiMovePosition = Number.parseInt(
-        aiMoveText.match(/\d+/)?.[0] || "-1"
-      );
+      // const aiMovePosition = Number.parseInt(
+      //   aiMoveText.match(/\d+/)?.[0] || "-1"
+      // );
 
       const aiMove = aiMovePosition - 1;
 
