@@ -18,15 +18,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { CallSettings, LanguageModel, ModelMessage, streamText } from 'ai';
+import { CallSettings, generateText, LanguageModel, ModelMessage, stepCountIs, streamText, tool } from 'ai';
 import 'dotenv/config';
-import { Prompt } from 'next/font/google';
+
 
 interface StreamTextOptions extends CallSettings {
   
   model: LanguageModel;
   apiKey?: string;
   prompt: string;
+  
 }
 interface Score {
   human: number;
@@ -97,7 +98,8 @@ export default function TicTacToe() {
     setIsLoading(true);
     setAiThinking(true);
     setError(null);
-
+    const model = currentmodel; //get model from state
+     localStorage.setItem("tictactoeModel", model) //save model to local storage
    
     try {
       console.log("Making AI move with difficulty level:", difficulty);
@@ -106,7 +108,7 @@ export default function TicTacToe() {
       // const url = "https://ai1.rougeai.net";
       // const url = "http://localhost:11434";
       
-      const response = streamText({
+      const { text } = await generateText({
 
           
       // fetch(`${url}/api/chat`, { //here I want to hit gatewat.ts***
@@ -119,9 +121,10 @@ export default function TicTacToe() {
       //   },
         // body: JSON.stringify({
           // model: "phi4:14b-q8_0"
-          apikey: process.env.AI_GATEWAY_API_KEY,
-          model: currentmodel,
-          prompt: 
+          // apikey: process.env.AI_GATEWAY_API_KEY,
+          model: model,
+            
+            prompt:
               `You are playing Tic-Tac-Toe. You are 'O'. The current board is: 
 ${formatBoardForAI(board)}
 
@@ -163,27 +166,24 @@ Thinking process:
 - If not, prefer center (5), then corners (1,3,7,9), then edges (2,4,6,8).
 - Choose the move based on difficulty logic.
 
-Return ONLY the number (1-9) of your chosen move. Do not include any explanation or text — just the number.`,
+Return ONLY the number the move number (1-9) of your chosen move. Do not include any explanation or text — just the number.`,
           //   },
           // ],
-
+          
+          
           // stream: true,
-        } as StreamTextOptions);
+        // } as StreamTextOptions);
       // });
       // console.log("HEADERS:", response.headers);
       // console.log("RESPONSE:", response);
+      }); 
+      // if (!response) {
+      //   throw new Error(`HTTP error! status: ${response}`);
+      // }
 
-      if (!response) {
-        throw new Error(`HTTP error! status: ${response}`);
-      }
-const aiMoveTextChuncks = [];
-    for await (const chunk of response.textStream) {
-      aiMoveTextChuncks.push(chunk);
-    }
-    const aiMoveText = aiMoveTextChuncks.join('');
-
+      console.log("AI response text:", text);
     const aiMovePosition = Number.parseInt(
-      aiMoveText.match(/\d+/)?.[0] || "-1");
+      text.match(/\d+/)?.[0] || "-1");
 
       // const data = await response.response();
       // const aiMoveText = response.textStream;
