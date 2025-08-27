@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/tooltip";
 import { CallSettings, generateText, LanguageModel, ModelMessage, stepCountIs, streamText, tool } from 'ai';
 import 'dotenv/config';
+import ModelOptions from './load-model';
 
 
 interface StreamTextOptions extends CallSettings {
@@ -297,6 +298,7 @@ Return ONLY the number the move number (1-9) of your chosen move. Do not include
     <div className='flex flex-col items-center'>
       <Card className='w-full max-w-md mb-6'>
         <CardHeader>
+          <ModelOptions />
           <CardTitle className='text-center'>{getStatus()}</CardTitle>
         </CardHeader>
         <CardContent>
