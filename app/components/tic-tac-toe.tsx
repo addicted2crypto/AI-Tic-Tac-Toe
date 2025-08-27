@@ -43,7 +43,7 @@ interface Score {
   draws: number;
 }
 
-
+const apikey = process.env.AI_GATEWAY_API_KEY;
 export default function TicTacToe() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(true);
@@ -118,7 +118,7 @@ export default function TicTacToe() {
       
       const response = await generateText({
 
-          
+          apiKey: apikey,
       // fetch(`${url}/api/chat`, { //here I want to hit gatewat.ts***
       //   method: "POST",
       //   headers: {
