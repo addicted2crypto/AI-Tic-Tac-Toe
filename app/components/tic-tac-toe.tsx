@@ -1,5 +1,6 @@
 "use client";
 
+import { z } from "zod";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,8 +28,15 @@ interface StreamTextOptions extends CallSettings {
   model: LanguageModel;
   apiKey?: string;
   prompt: string;
+
   
 }
+interface GenerateTextResponse {
+  data: {
+    text: string;
+  };
+   
+  }
 interface Score {
   human: number;
   ai: number;
@@ -108,7 +116,7 @@ export default function TicTacToe() {
       // const url = "https://ai1.rougeai.net";
       // const url = "http://localhost:11434";
       
-      const { text } = await generateText({
+      const response = await generateText({
 
           
       // fetch(`${url}/api/chat`, { //here I want to hit gatewat.ts***
@@ -123,7 +131,10 @@ export default function TicTacToe() {
           // model: "phi4:14b-q8_0"
           // apikey: process.env.AI_GATEWAY_API_KEY,
           model: model,
-            
+            tools: ({
+            aiMoves: tool,
+            description: 'Execute tic-tac-toe moves',
+            }),
             prompt:
               `You are playing Tic-Tac-Toe. You are 'O'. The current board is: 
 ${formatBoardForAI(board)}
@@ -170,20 +181,20 @@ Return ONLY the number the move number (1-9) of your chosen move. Do not include
           //   },
           // ],
           
-          
-          // stream: true,
-        // } as StreamTextOptions);
+          tool: 'text',
+          stream: true,
+        } as StreamTextOptions);
       // });
       // console.log("HEADERS:", response.headers);
       // console.log("RESPONSE:", response);
-      }); 
+      // }); 
       // if (!response) {
       //   throw new Error(`HTTP error! status: ${response}`);
       // }
 
-      console.log("AI response text:", text);
+      console.log("AI response text:" , response.text);
     const aiMovePosition = Number.parseInt(
-      text.match(/\d+/)?.[0] || "-1");
+      response.text.match(/\d+/)?.[0] || "-1");
 
       // const data = await response.response();
       // const aiMoveText = response.textStream;
