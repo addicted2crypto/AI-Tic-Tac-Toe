@@ -8,9 +8,10 @@ const ModelOptions = () => {
     { label: 'OpenAI GPT-4', value: 'openai-gpt-4' },
     { label: 'Anthropic Claude', value: 'anthropic-claude' },
     { label: 'Local llama3.3b', value: 'local-llama3.3b' }, 
-    { label: 'Local llama2.7b', value: 'local-llama2.7b' },
-    { label: 'Local llama2.13b', value: 'local-llama2.13b' },
+    { label: 'Local llama3.1b', value: 'local-llama3.1b' },
+    { label: 'Local llama2b', value: 'local-llama2b' },
     { label: 'Local gpt-oss:20b', value: 'local-gpt-oss:20b' }, 
+    { label: 'Local gpt-oss:12b', value: 'local-gpt-oss:12b' },
     // Will add more models here...
   ];
     //will get rid of any this is not the way to do it, just testing
