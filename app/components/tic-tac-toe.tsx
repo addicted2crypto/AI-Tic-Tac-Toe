@@ -22,6 +22,7 @@ import {
 import { CallSettings, generateText, LanguageModel, ModelMessage, stepCountIs, streamText, tool } from 'ai';
 import 'dotenv/config';
 import ModelOptions from './load-model';
+import { main } from '@/gateway';
 
 
 interface StreamTextOptions extends CallSettings {
@@ -116,9 +117,10 @@ export default function TicTacToe() {
       console.log("Making fetch request...");
       // const url = "https://ai1.rougeai.net";
       // const url = "http://localhost:11434";
+     
       
       const response = await generateText({
-
+         
           apiKey: apikey,
       // fetch(`${url}/api/chat`, { //here I want to hit gatewat.ts***
       //   method: "POST",
