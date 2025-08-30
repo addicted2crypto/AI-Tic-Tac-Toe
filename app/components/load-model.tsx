@@ -20,7 +20,7 @@ const ModelOptions = () => {
   };
 
   return (
-    <div className="p-0.5 bg-[#00000]">
+    <div className="p-0.75 bg-[#00000]">
       <select value={selectedModel} onChange={handleModelChange}>
         {models.map((model, index) => (
           <option key={index} value={model.value}>
